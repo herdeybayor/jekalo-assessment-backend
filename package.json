@@ -10,6 +10,7 @@
   "author": "Sherifdeen Adebayo",
   "license": "ISC",
   "dependencies": {
+    "cors": "^2.8.5",
     "dotenv": "^15.0.0",
     "express": "^4.17.2",
     "lodash": "^4.17.21",
