@@ -41,20 +41,26 @@ app.post("/api/user", (req, res) => {
     username: _.lowerCase(req.body.username),
     date_of_birth: _.kebabCase(req.body.date_of_birth),
   });
-  newUser
-    .save()
-    .then((user) => {
-      res.json({
-        name_prefix: user.name_prefix,
-        first_name: user.first_name,
-        last_name: user.last_name,
-        username: user.username,
-        date_of_birth: user.date_of_birth,
-      });
-    })
-    .catch((err) => {
-      res.json({ err: err });
-    });
+  User.find({ username: req.body.username }).then((doc) => {
+    if (doc[0]) {
+      res.json({ message: "Username is already taken" });
+    } else {
+      newUser
+        .save()
+        .then((user) => {
+          res.json({
+            name_prefix: user.name_prefix,
+            first_name: user.first_name,
+            last_name: user.last_name,
+            username: user.username,
+            date_of_birth: user.date_of_birth,
+          });
+        })
+        .catch((err) => {
+          res.json({ err: err });
+        });
+    }
+  });
 });
 
 app.get("/api/users", (req, res) => {
