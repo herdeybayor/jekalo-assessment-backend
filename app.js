@@ -16,12 +16,9 @@ app.use(express.json());
 app.use(morgan("dev"));
 
 //Mongoose Connection <<NOTE: Remember to create .env file and add DB_STRING>>
-mongoose.connect(
-  "mongodb+srv://admin-dprince:dPrince9441@cluster0.5uocq.mongodb.net/jekaloAssDB?retryWrites=true&w=majority",
-  () => {
-    console.log("Connection to server successful");
-  }
-);
+mongoose.connect(process.env.DB_STRING, () => {
+  console.log("Connection to server successful");
+});
 
 app.get("/", (req, res) => {
   res.json({ message: "Welcome to Jekalo Assessment Backend" });
