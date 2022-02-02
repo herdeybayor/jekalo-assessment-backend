@@ -31,6 +31,7 @@ app.get("/", (req, res) => {
 });
 
 app.post("/api/user", (req, res) => {
+  const dob = _.kebabCase(req.body.date_of_birth);
   const newUser = new User({
     //Visit https://lodash.com to know more about lodash
     name_prefix: `${_.startCase(req.body.first_name).slice(0, 1)}${_.startCase(
@@ -45,20 +46,26 @@ app.post("/api/user", (req, res) => {
     if (doc[0]) {
       res.json({ message: "Username is already taken" });
     } else {
-      newUser
-        .save()
-        .then((user) => {
-          res.json({
-            name_prefix: user.name_prefix,
-            first_name: user.first_name,
-            last_name: user.last_name,
-            username: user.username,
-            date_of_birth: user.date_of_birth,
-          });
-        })
-        .catch((err) => {
-          res.json({ err: err });
+      if (isNaN(_.camelCase(dob))) {
+        res.json({
+          message: "Date of Birth input type is incorrect. Try DD-MM-YYYY",
         });
+      } else {
+        newUser
+          .save()
+          .then((user) => {
+            res.json({
+              name_prefix: user.name_prefix,
+              first_name: user.first_name,
+              last_name: user.last_name,
+              username: user.username,
+              date_of_birth: user.date_of_birth,
+            });
+          })
+          .catch((err) => {
+            res.json({ err: err });
+          });
+      }
     }
   });
 });
